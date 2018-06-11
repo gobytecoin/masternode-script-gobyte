@@ -2,7 +2,7 @@
 
 ################################################
 # Script by François YoYae GINESTE - 03/04/2018
-# Recode for GoByte - 10/08/2017
+# Recode by LowKey for GoByte Core - 10/08/2017
 # https://www.gobyte.network/
 ################################################
 
@@ -54,10 +54,11 @@ decho "Updating system and installing required packages."
 # update package and upgrade Ubuntu
 apt-get -y update >> $LOG_FILE 2>&1
 # Add Berkely PPA
-decho "Installing bitcoin PPA..."
+decho "Installing Bitcoin & GoByte PPA..."
 
 apt-get -y install software-properties-common >> $LOG_FILE 2>&1
 apt-add-repository -y ppa:bitcoin/bitcoin >> $LOG_FILE 2>&1
+add-apt-repository -y ppa:gobytecoin/gobyte >> $LOG_FILE 2>&1
 apt-get -y update >> $LOG_FILE 2>&1
 
 # Install required packages
@@ -70,18 +71,11 @@ apt-get -y install unzip >> $LOG_FILE 2>&1
 apt-get -y install virtualenv >> $LOG_FILE 2>&1
 apt-get -y install python-virtualenv >> $LOG_FILE 2>&1
 apt-get -y install pwgen >> $LOG_FILE 2>&1
-apt-get -y install libevent-dev >> $LOG_FILE 2>&1
-apt-get -y install libdb4.8-dev libdb4.8++-dev >> $LOG_FILE 2>&1
-apt-get -y install libboost-all-dev >> $LOG_FILE 2>&1
 
-## Download and Install new bin
-decho "Downloading new core and installing it"
-wget https://github.com/gobytecoin/gobyte/releases/download/v0.12.2.3/GoByteCore-0.12.2.3_Linux64.tar.gz >> $LOG_FILE 2>&1
-sudo tar xvzf GoByteCore-0.12.2.3_Linux64.tar.gz >> $LOG_FILE 2>&1
-sudo cp GoByteCore-0.12.2.3/usr/local/bin/gobyted /usr/bin/ >> $LOG_FILE 2>&1
-sudo cp GoByteCore-0.12.2.3/usr/local/bin/gobyte-cli /usr/bin/ >> $LOG_FILE 2>&1
-sudo cp GoByteCore-0.12.2.3/usr/local/bin/gobyte-tx /usr/bin/ >> $LOG_FILE 2>&1
-rm -rf GoByteCore-0.12.2.3 >> $LOG_FILE 2>&1
+#Install GoByte Daemon
+decho "Installing GoByte Core..."
+apt-get -y install gobyte >> $LOG_FILE 2>&1
+apt-get -y update >> $LOG_FILE 2>&1 #To make sure
 
 ## Backup configuration
 decho "Backup configuration file"
