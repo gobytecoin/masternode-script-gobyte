@@ -1,12 +1,12 @@
 #!/bin/bash
 
 ################################################
-# Script by François YoYae GINESTE - 03/04/2018
-# Recode by LowKey for GoByte Core - 10/08/2017
+# Script by François YoYae GINESTE - 10/08/2017
+# Recode by LowKey for GoByte Core - 03/04/2018
 # https://www.gobyte.network/
 ################################################
 
-LOG_FILE=/tmp/update.log
+LOG_FILE=/tmp/gobyte_update.log
 
 decho () {
   echo `date +"%H:%M:%S"` $1
@@ -49,21 +49,16 @@ pkill -f gobyted  >> $LOG_FILE 2>&1
 ## Wait to kill properly
 sleep 5
 
-decho "Updating system and installing required packages."
+decho "Installing required packages."
 
-# update package and upgrade Ubuntu
-apt-get -y update >> $LOG_FILE 2>&1
-# Add Berkely PPA
-decho "Installing Bitcoin & GoByte PPA..."
-
+# Add GoByte PPA
+decho "Installing GoByte PPA..."
 apt-get -y install software-properties-common >> $LOG_FILE 2>&1
-apt-add-repository -y ppa:bitcoin/bitcoin >> $LOG_FILE 2>&1
 add-apt-repository -y ppa:gobytecoin/gobyte >> $LOG_FILE 2>&1
 apt-get -y update >> $LOG_FILE 2>&1
 
 # Install required packages
 decho "Installing base packages and dependencies..."
-
 apt-get -y install sudo >> $LOG_FILE 2>&1
 apt-get -y install wget >> $LOG_FILE 2>&1
 apt-get -y install git >> $LOG_FILE 2>&1
@@ -72,13 +67,9 @@ apt-get -y install virtualenv >> $LOG_FILE 2>&1
 apt-get -y install python-virtualenv >> $LOG_FILE 2>&1
 apt-get -y install pwgen >> $LOG_FILE 2>&1
 
-#Install GoByte Daemon
+# Install GoByte Daemon
 decho "Installing GoByte Core..."
 apt-get -y install gobyte >> $LOG_FILE 2>&1
-apt-get -y update >> $LOG_FILE 2>&1 #To make sure
-
-## Backup configuration
-decho "Backup configuration file"
 
 if [ "$whoami" != "root" ]; then
 	path=/home/$whoami
@@ -88,22 +79,26 @@ fi
 
 cd $path
 
-#relunch core
+# Relaunch core
 decho "Relaunching GoByte Core"
 sudo -H -u $whoami bash -c 'gobyted' >> $LOG_FILE 2>&1
 
 ## Update sentinel
 decho "Setting up sentinel"
 
-echo 'Downloading sentinel...'
-#Install Sentinel
-git clone https://github.com/gobytecoin/sentinel.git /home/$whoami/sentinel >> $LOG_FILE 2>&1
-chown -R $whoami:$whoami /home/$whoami/sentinel >> $LOG_FILE 2>&1
+if [ ! -d "/home/$whoami/sentinel" ];
+	decho 'Downloading sentinel...'
+	#Install Sentinel
+	git clone https://github.com/gobytecoin/sentinel.git /home/$whoami/sentinel >> $LOG_FILE 2>&1
+	chown -R $whoami:$whoami /home/$whoami/sentinel >> $LOG_FILE 2>&1
 
-cd /home/$whoami/sentinel
-echo 'Setting up dependencies...'
-sudo -H -u $whoami bash -c 'virtualenv ./venv' >> $LOG_FILE 2>&1
-sudo -H -u $whoami bash -c './venv/bin/pip install -r requirements.txt' >> $LOG_FILE 2>&1
+	cd /home/$whoami/sentinel
+	echo 'Setting up dependencies...'
+	sudo -H -u $whoami bash -c 'virtualenv ./venv' >> $LOG_FILE 2>&1
+	sudo -H -u $whoami bash -c './venv/bin/pip install -r requirements.txt' >> $LOG_FILE 2>&1
+else
+	decho "Sentinel already installed.";
+fi	
 
 #Setup crontab
 echo "@reboot sleep 30 && gobyted" >> newCrontab
