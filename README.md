@@ -29,7 +29,7 @@ Follow the on-screen instructions.
 To launch the installation, connect to your VPS via SSH and run this command :
 
 ```bash
-wget https://raw.githubusercontent.com/gobytecoin/masternode-script-gobyte/master/update_12_1_0_to_12_2_3.sh && chmod +x update_12_1_0_to_12_2_3.sh && ./update_12_1_0_to_12_2_3.sh
+wget https://raw.githubusercontent.com/gobytecoin/masternode-script-gobyte/master/update.sh && chmod +x update.sh && ./update.sh
 ```
 
 Follow the on-screen instructions.

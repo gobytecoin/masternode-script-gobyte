@@ -2,7 +2,7 @@
 
 ################################################
 # Script by François YoYae GINESTE - 03/04/2018
-# Recode by LowKey for GoByte Core - 10/08/2017
+# Recode by LowKey for GoByte Core - 10/07/2018
 # https://www.gobyte.network/
 ################################################
 
@@ -57,7 +57,6 @@ apt-get -y update >> $LOG_FILE 2>&1
 decho "Installing Bitcoin & GoByte PPA..."
 
 apt-get -y install software-properties-common >> $LOG_FILE 2>&1
-apt-add-repository -y ppa:bitcoin/bitcoin >> $LOG_FILE 2>&1
 add-apt-repository -y ppa:gobytecoin/gobyte >> $LOG_FILE 2>&1
 apt-get -y update >> $LOG_FILE 2>&1
 
@@ -75,7 +74,6 @@ apt-get -y install pwgen >> $LOG_FILE 2>&1
 #Install GoByte Daemon
 decho "Installing GoByte Core..."
 apt-get -y install gobyte >> $LOG_FILE 2>&1
-apt-get -y update >> $LOG_FILE 2>&1 #To make sure
 
 ## Backup configuration
 decho "Backup configuration file"
@@ -93,25 +91,31 @@ decho "Relaunching GoByte Core"
 sudo -H -u $whoami bash -c 'gobyted' >> $LOG_FILE 2>&1
 
 ## Update sentinel
-decho "Setting up sentinel"
+decho "Checking for Sentinel..."
 
-echo 'Downloading sentinel...'
-#Install Sentinel
-git clone https://github.com/gobytecoin/sentinel.git /home/$whoami/sentinel >> $LOG_FILE 2>&1
-chown -R $whoami:$whoami /home/$whoami/sentinel >> $LOG_FILE 2>&1
+if [ ! -d "/home/$whoami/sentinel" ]; then
+  decho 'Sentinel not install.'
+  echo 'Downloading sentinel...'
+  #Install Sentinel
+  git clone https://github.com/gobytecoin/sentinel.git /home/$whoami/sentinel >> $LOG_FILE 2>&1
+  chown -R $whoami:$whoami /home/$whoami/sentinel >> $LOG_FILE 2>&1
 
-cd /home/$whoami/sentinel
-echo 'Setting up dependencies...'
-sudo -H -u $whoami bash -c 'virtualenv ./venv' >> $LOG_FILE 2>&1
-sudo -H -u $whoami bash -c './venv/bin/pip install -r requirements.txt' >> $LOG_FILE 2>&1
+  cd /home/$whoami/sentinel
+  echo 'Setting up dependencies...'
+  sudo -H -u $whoami bash -c 'virtualenv ./venv' >> $LOG_FILE 2>&1
+  sudo -H -u $whoami bash -c './venv/bin/pip install -r requirements.txt' >> $LOG_FILE 2>&1
 
-#Setup crontab
-echo "@reboot sleep 30 && gobyted" >> newCrontab
-echo "* * * * * cd /home/$whoami/sentinel && ./venv/bin/python bin/sentinel.py >/dev/null 2>&1" >> newCrontab
-crontab -u $whoami newCrontab >> $LOG_FILE 2>&1
-rm newCrontab >> $LOG_FILE 2>&1
+  #Setup crontab
+  echo "@reboot sleep 30 && gobyted" >> newCrontab
+  echo "* * * * * cd /home/$whoami/sentinel && ./venv/bin/python bin/sentinel.py >/dev/null 2>&1" >> newCrontab
+  crontab -u $whoami newCrontab >> $LOG_FILE 2>&1
+  rm newCrontab >> $LOG_FILE 2>&1
+  decho 'Sentinel Installed.'
+else
+  echo "Sentinel already installed.";
+fi
 
-decho "Update finish !"
+decho "GoByte Core has been updated !"
 echo "Now, you need to finally restart your masternode in the following order: "
 echo "Go to your windows/mac wallet on the Masternode tab."
 echo "Select the updated masternode and then click on start-alias."

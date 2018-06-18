@@ -2,7 +2,7 @@
 
 ################################################
 # Script by François YoYae GINESTE - 03/04/2018
-# Recode by LowKey for GoByte Core - 10/08/2017
+# Recode by LowKey for GoByte Core - 10/07/2018
 # https://www.gobyte.network/
 ################################################
 
@@ -75,7 +75,6 @@ apt-get -y update >> $LOG_FILE 2>&1
 decho "Installing Bitcoin & GoByte PPA..."
 
 apt-get -y install software-properties-common >> $LOG_FILE 2>&1
-apt-add-repository -y ppa:bitcoin/bitcoin >> $LOG_FILE 2>&1
 add-apt-repository -y ppa:gobytecoin/gobyte >> $LOG_FILE 2>&1
 apt-get -y update >> $LOG_FILE 2>&1
 
@@ -139,6 +138,7 @@ cat << EOF > /home/$whoami/.gobytecore/gobyte.conf
 rpcuser=$user
 rpcpassword=$password
 rpcallowip=127.0.0.1
+rpcport=12454
 listen=1
 server=1
 daemon=1
@@ -146,6 +146,22 @@ maxconnections=24
 masternode=1
 masternodeprivkey=$key
 externalip=$ip
+addnode=81.17.56.122
+addnode=103.72.163.84
+addnode=103.72.163.225
+addnode=81.17.56.88
+addnode=62.212.88.40
+addnode=62.212.88.48
+addnode=81.17.56.120
+addnode=62.212.89.246
+addnode=103.72.163.96
+addnode=103.72.162.222
+addnode=54.38.72.115
+addnode=94.23.156.183
+addnode=94.23.162.60
+addnode=5.135.59.35
+addnode=145.239.94.161
+addnode=158.69.113.97
 EOF
 chown -R $whoami:$whoami /home/$whoami
 
