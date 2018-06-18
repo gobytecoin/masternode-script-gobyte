@@ -24,7 +24,7 @@ Follow the on-screen instructions.
 
 ---
 
-## Update script (from 0.12.1.x to 0.12.2.3)
+## Update script (update to latest version)
 
 To launch the installation, connect to your VPS via SSH and run this command :
 
