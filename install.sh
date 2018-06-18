@@ -106,8 +106,8 @@ if [[ ("$UFW" == "y" || "$UFW" == "Y" || "$UFW" == "") ]]; then
 	apt-get -y install ufw >> $LOG_FILE 2>&1
 	ufw allow ssh/tcp >> $LOG_FILE 2>&1
 	ufw allow sftp/tcp >> $LOG_FILE 2>&1
-	ufw allow 24156/tcp >> $LOG_FILE 2>&1
-	ufw allow 24157/tcp >> $LOG_FILE 2>&1
+	ufw allow 12455/tcp >> $LOG_FILE 2>&1
+	ufw allow 12454/tcp >> $LOG_FILE 2>&1
 	ufw default deny incoming >> $LOG_FILE 2>&1
 	ufw default allow outgoing >> $LOG_FILE 2>&1
 	ufw logging on >> $LOG_FILE 2>&1
