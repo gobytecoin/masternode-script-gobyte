@@ -72,7 +72,7 @@ decho "Updating system and installing required packages."
 # update package and upgrade Ubuntu
 apt-get -y update >> $LOG_FILE 2>&1
 # Add Berkely PPA
-decho "Installing Bitcoin & GoByte PPA..."
+decho "Installing from GoByte PPA..."
 
 apt-get -y install software-properties-common >> $LOG_FILE 2>&1
 add-apt-repository -y ppa:gobytecoin/gobyte >> $LOG_FILE 2>&1
@@ -168,7 +168,7 @@ chown -R $whoami:$whoami /home/$whoami
 #Run gobyted as selected user
 sudo -H -u $whoami bash -c 'gobyted' >> $LOG_FILE 2>&1
 
-echo 'GoByte Core prepared and lunched'
+echo 'GoByte Core prepared and launched'
 
 sleep 10
 
@@ -194,10 +194,10 @@ rm newCrontab >> $LOG_FILE 2>&1
 
 decho "Starting your masternode"
 echo ""
-echo "Now, you need to finally start your masternode in the following order: "
-echo "1- Go to your windows/mac wallet and modify masternode.conf as required, then restart and from the Masternode tab"
-echo "2- Select the newly created masternode and then click on start-alias."
-echo "3- Once completed, please return to VPS and wait for the wallet to be synced."
-echo "4- Then you can try the command 'gobyte-cli masternode status' to get the masternode status."
+echo "Now, you need to start your masternode in the following order: "
+echo "1- Go to your Windows/Mac wallet and modify masternode.conf as required, then restart the wallet"
+echo "2- From the masternode tab; Select the newly created masternode and click on start-alias."
+echo "3- Once completed, return to the VPS and wait for the wallet to be synchronized."
+echo "4- You may then try the command 'gobyte-cli masternode status' to get the masternode status."
 
 su $whoami
